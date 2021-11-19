@@ -5,14 +5,13 @@ import api from "../../../services/api";
 export default function Login() {
   const navigate = useNavigate();
 
-  const initialValue = {
+  const [formValues, setValues] = useState({
     username: "",
     password: "",
-  };
+  });
 
-  const [formValues, setValues] = useState(initialValue);
   const [formErros, setErros] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
 
   function onChange(e) {
     const { name, value } = e.target;
@@ -22,7 +21,19 @@ export default function Login() {
   function onSubmit(e) {
     e.preventDefault();
     setErros(validateForm(formValues));
-    setIsSubmit(true);
+    if (Object.keys(formErros).length === 0) {
+      api
+        .post("login", {
+          Matricula: formValues.username,
+          Senha: formValues.password,
+        })
+        .then((resp) => {
+          console.log(resp, "resp");
+        })
+        .catch(({ request }) => {
+          console.error(JSON.parse(request.response).message);
+        });
+    }
   }
 
   function validateForm(values) {
@@ -40,23 +51,7 @@ export default function Login() {
     return erros;
   }
 
-  useEffect(() => {
-    if (Object.keys(formErros).length === 0 && isSubmit) {
-      console.log("chama api");
-      api
-        .post("/login", {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json;charset=UTF-8",
-            "Access-Control-Allow-Headers":
-              "Origin, X-Requested-With, Content-Type, Accept",
-          },
-        })
-        .then((resp) => {
-          console.log(resp, "resp");
-        });
-    }
-  }, [formErros, isSubmit]);
+  useEffect(() => {}, [errorMessage]);
 
   return (
     <div className="container">
@@ -69,7 +64,7 @@ export default function Login() {
             <form id="login-form" className="form" onSubmit={onSubmit}>
               <h3 className="text-center">Login</h3>
               <div className="form-group">
-                <label for="username">Matrícula:</label>
+                <label>Matrícula:</label>
                 <br />
                 <input
                   type="text"
@@ -79,7 +74,7 @@ export default function Login() {
                   onChange={onChange}
                 />
                 <p style={{ color: "red" }}>{formErros.username}</p>
-                <label for="password">Senha:</label>
+                <label>Senha:</label>
                 <br />
                 <input
                   type="text"
@@ -89,6 +84,7 @@ export default function Login() {
                   onChange={onChange}
                 />
                 <p style={{ color: "red" }}>{formErros.password}</p>
+                <p style={{ color: "red" }}>{formErros.username}</p>
                 <div className="btn-register">
                   <button type="submit" className="btn btn-success">
                     Entrar

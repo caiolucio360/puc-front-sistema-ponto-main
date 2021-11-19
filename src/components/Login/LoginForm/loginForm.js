@@ -16,7 +16,7 @@ export default function LoginFrom() {
               <form class="form">
                 <h3 class="text-center">Cadastrar Usuario</h3>
                 <div class="form-group">
-                  <label for="username">Informe a Matrícula:</label>
+                  <label>Informe a Matrícula:</label>
                   <br />
                   <input
                     type="text"
@@ -24,7 +24,7 @@ export default function LoginFrom() {
                     id="username"
                     class="form-control"
                   />
-                  <label for="username">e-mail:</label>
+                  <label>e-mail:</label>
                   <br />
                   <input
                     type="email"
@@ -32,7 +32,7 @@ export default function LoginFrom() {
                     id="username"
                     class="form-control"
                   />
-                  <label for="password">Senha:</label>
+                  <label>Senha:</label>
                   <br />
                   <input
                     type="text"
